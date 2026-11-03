@@ -1,18 +1,13 @@
 type: custom:bubble-card
 card_type: pop-up
-hash: "#edifier"
-margin_top_mobile: auto
-margin_top_desktop: auto
+hash: '#edifier'
 show_header: false
-close_by_clicking_outside: false
-backdrop_blur: "5"
-bg_blur: "100"
-bg_opacity: "50"
+close_by_clicking_outside: true
 button_type: name
 styles: |
   #root {
     border: 1px solid rgba(var(--rgb-primary-text-color),0.1);
-    background: rgba(255, 255, 255, 0.1);
+    
     }
 sub_button:
   main: []
@@ -30,6 +25,21 @@ cards:
           action: none
         icon: mdi:speaker
       - type: spacer
+      - type: template
+        entity: input_boolean.akustika
+        double_tap_action:
+          action: none
+        tap_action:
+          action: more-info
+        hold_action:
+          action: none
+        icon: mdi:information
+        card_mod:
+          style:
+            .: |
+              {% set hover = 'true' %}
+              {% set stating = 'false' %}
+              {% include 'chip_settings_style.jinja' %}
       - type: back
         card_mod:
           style:
@@ -39,7 +49,7 @@ cards:
               {% include 'chip_settings_style.jinja' %}
     card_mod:
       style:
-        mushroom-back-chip:nth-child(3)$: |
+        mushroom-back-chip:last-child$: |
           ha-state-icon {
             --card-mod-icon: mdi:close;
           }
@@ -48,43 +58,31 @@ cards:
     grid_options:
       columns: 12
       rows: auto
-  - type: custom:mushroom-chips-card
-    chips:
-      - type: template
-        entity: input_boolean.akustika
-        tap_action:
-          action: toggle
-        hold_action:
-          action: none
-        double_tap_action:
-          action: none
-        icon: mdi:power
-        icon_color: |2-
-            {% if is_state(entity, 'on')%} black
-            {% else %} 1
-            {% endif %}
-        card_mod:
-          style:
-            .: |
-              {% set scale = '1' %}
-              {% set hover = 'true' %}
-              {% set stating = 'true' %}
-              {% set state_on = 'on' %}
-              {% set color = 'rgba(120,120,120,0.2)' %}
-              {% set hover_color_off = 'rgba(120,120,120,0.3) !important' %}
-              {% include 'chip_settings_style.jinja' %}
-    alignment: center
+  - type: custom:mushroom-template-card
+    entity: input_boolean.akustika
+    tap_action:
+      action: toggle
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    icon: mdi:power
+    color: |
+      {% if is_state(entity, 'on') %} black
+      {% else %}white{% endif %}
+    features_position: bottom
+    icon_tap_action:
+      action: none
+    vertical: true
     card_mod:
-      style:
-        .: |
-          ha-card {
-             --chip-background: none !important;
-             --chip-border-radius: 1000px;
-             zoom: 6;
-             #--chip-height: 200px;
-             --chip-spacing: {{chip_spacing|default(0)}}px;
-             margin: 2px;
-             }
+      style: |
+        ha-card {
+          background: {% if is_state(config.entity, 'on') %}rgba(255, 255, 255, 1){% else %}rgba(255, 255, 255, 0.1){% endif %} !important;
+          zoom: 2;
+        }
+    grid_options:
+      rows: auto
+      columns: full
   - type: custom:horizontal-stack-in-card
     cards:
       - type: custom:mushroom-template-card
@@ -94,7 +92,7 @@ cards:
           columns: 12
           rows: auto
         color: |-
-          {% if is_state(config.entity, 'M-Audio')%} white
+          {% if is_state(config.entity, 'M-Audio')%}  white
           {% else %} disabled
           {% endif %}
         tap_action:
@@ -113,7 +111,7 @@ cards:
           style: |
             ha-card {
               zoom: 1.5;
-              background: none;
+              background: none !important;
             }
       - type: custom:mushroom-template-card
         features_position: bottom
@@ -122,7 +120,7 @@ cards:
           columns: 12
           rows: auto
         color: |-
-          {% if is_state(config.entity, 'PC')%} white
+          {% if is_state(config.entity, 'PC')%}  white
           {% else %} disabled
           {% endif %}
         tap_action:
@@ -141,7 +139,7 @@ cards:
           style: |
             ha-card {
               zoom: 1.5;
-              background: none;
+              background: none !important;
             }
       - type: custom:mushroom-template-card
         features_position: bottom
@@ -150,7 +148,7 @@ cards:
           columns: 12
           rows: auto
         color: |-
-          {% if is_state(config.entity, 'Bluetooth')%} white
+          {% if is_state(config.entity, 'Bluetooth')%}  white
           {% else %} disabled
           {% endif %}
         tap_action:
@@ -169,13 +167,13 @@ cards:
           style: |
             ha-card {
               zoom: 1.5;
-              background: none;
+              background: none !important;
             }
     card_mod:
       style: |
         ha-card {
          background: none !important;
         }
-popup_mode: default
+popup_mode: fit-content
 card_layout: large
-slide_to_close_distance: "500"
+slide_to_close_distance: '500'
